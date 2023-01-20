@@ -5,6 +5,8 @@
 import pygame as pg
 import numpy as np
 
+
+#TODO: ADD A WAY TO MOVE THE CAMERA UP AND DOWN
 def main():
     pg.init()
     window = pg.display.set_mode((800, 600))

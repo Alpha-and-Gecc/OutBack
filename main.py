@@ -51,7 +51,7 @@ def main():
 
             for p in range(vres):
                 """for every column of pixels, find the colour of each pixel in said column from the bottom up"""
-                n = (vres/(vres-p))/adjustCos
+                n = ((halfvres*2)/(vres-p))/adjustCos
                 #determines the distance from the player's coordinates to the target pixel
                 pixelX = posX + cos*n
                 pixelY = posY + sin*n
@@ -61,7 +61,7 @@ def main():
                 amendedY = int(pixelY * 2 % 1 * 99)
                 #converts pixel coordinates to int such that it can be found on the textures
 
-                shade = 0.2 + 0.3 * (1 - p / halfvres)
+                shade = 0.1 + 0.1 * (1 - p / (vres/2))
                 #light strength plus max brightness value times the base floor pixel colour
 
                 frame[i][halfvres * 2 - p - 1] = shade*floor[amendedX][amendedY]
@@ -90,19 +90,19 @@ def movement(posX, posY, yaw, vres, halfvres, keys):
     if keys[pg.K_RIGHT] or keys[ord("d")]:
         yaw = yaw + 0.05
 
-    if keys[pg.K_UP] or keys[ord("w")]:
+    if keys[pg.K_UP]:
         posX = posX + np.cos(yaw)*0.1
         posY = posY + np.sin(yaw)*0.1
 
-    if keys[pg.K_DOWN] or keys[ord("s")]:
+    if keys[pg.K_DOWN]:
         posX = posX - np.cos(yaw)*0.1
         posY = posY - np.sin(yaw)*0.1
 
-    if keys[ord("1")] and vres < halfvres*2:
+    if keys[ord("s")] and vres < halfvres*2:
         """controls the camera's  down movement by changing vertical resolution"""
         vres = vres + 10
 
-    if keys[ord("2")] and vres > 200:
+    if keys[ord("w")] and vres > 200:
         """controls the camera's up movement by changing vertical resolution"""
         vres = vres - 10
 

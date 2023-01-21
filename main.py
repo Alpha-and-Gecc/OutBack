@@ -9,13 +9,14 @@ import numpy as np
 #TODO: ADD A WAY TO MOVE THE CAMERA UP AND DOWN
 def main():
     pg.init()
-    window = pg.display.set_mode((800, 600))
+    window = pg.display.set_mode((1600, 1200))
     running = True
 #    clock = pg.time.Clock()
 
     hres = 360#horizontal resolution, must be a multiple of 120
     halfvres = 200#half of the vertical resolution, must be a multiple of 100 that is divisible by hres
-    fov = 20
+    vres = 300#actual full vertical resolution
+    fov = 60
     #ackshually it's both fov and camera height
 
     mod = hres/fov
@@ -48,9 +49,9 @@ def main():
             adjustCos = np.cos(np.deg2rad(i/mod - (fov/2)))
             # variable to prevent warping
 
-            for p in range(halfvres):
+            for p in range(vres):
                 """for every column of pixels, find the colour of each pixel in said column from the bottom up"""
-                n = (halfvres/(halfvres-p))/adjustCos
+                n = (vres/(vres-p))/adjustCos
                 #determines the distance from the player's coordinates to the target pixel
                 pixelX = posX + cos*n
                 pixelY = posY + sin*n
@@ -69,18 +70,18 @@ def main():
 #        frame = new_frame(posX, posY, rot, frame, hres, halfvres, mod)
         surf = pg.surfarray.make_surface(frame * 255)
         #applies RGB colour values to the rendered screen
-        surf = pg.transform.scale(surf, (800, 600))
+        surf = pg.transform.scale(surf, (1600, 1200))
         #scale the screen to the window
 
         window.blit(surf, (0, 0))
         pg.display.update()
         #spawns the window somewhere on the monitor
 
-        posX, posY, yaw, keys = movement(posX, posY, yaw, pg.key.get_pressed())
+        posX, posY, yaw, vres, halfvres, keys = movement(posX, posY, yaw, vres, halfvres, pg.key.get_pressed())
         #moves the player
 
 
-def movement(posX, posY, yaw, keys):
+def movement(posX, posY, yaw, vres, halfvres, keys):
     """fairly simple code to move the player's coordinates"""
 
     if keys[pg.K_LEFT] or keys[ord("a")]:
@@ -97,7 +98,15 @@ def movement(posX, posY, yaw, keys):
         posX = posX - np.cos(yaw)*0.1
         posY = posY - np.sin(yaw)*0.1
 
-    return posX, posY, yaw, keys
+    if keys[ord("1")] and vres < halfvres*2:
+        """controls the camera's  down movement by changing vertical resolution"""
+        vres = vres + 10
+
+    if keys[ord("2")] and vres > 200:
+        """controls the camera's up movement by changing vertical resolution"""
+        vres = vres - 10
+
+    return posX, posY, yaw, vres, halfvres, keys
 
 if __name__ == "__main__":
     main()

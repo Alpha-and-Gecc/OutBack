@@ -100,7 +100,7 @@ def create_maze(maze_size, start_side, end_side, num_enemies):
 
     return maze
 
-#TODO: ADD A WAY TO MOVE THE CAMERA UP AND DOWN
+#TODO: FIX WALLS
 def main(map):
     pg.init()
     window = pg.display.set_mode((1600, 1200))
